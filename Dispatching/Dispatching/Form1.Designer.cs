@@ -30,6 +30,7 @@
 		{
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.gmap = new GMap.NET.WindowsForms.GMapControl();
+			this.groupBoxRoutes = new System.Windows.Forms.GroupBox();
 			this.textBoxNumber = new System.Windows.Forms.TextBox();
 			this.buttonAddRoute = new System.Windows.Forms.Button();
 			this.groupBoxRouteEdit = new System.Windows.Forms.GroupBox();
@@ -44,13 +45,17 @@
 			this.очиститьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.отменаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.listBox1 = new System.Windows.Forms.ListBox();
+			this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.открітьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.groupBoxRoutes.SuspendLayout();
 			this.groupBoxRouteEdit.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -68,6 +73,7 @@
 			// 
 			// splitContainer1.Panel2
 			// 
+			this.splitContainer1.Panel2.Controls.Add(this.groupBoxRoutes);
 			this.splitContainer1.Panel2.Controls.Add(this.textBoxNumber);
 			this.splitContainer1.Panel2.Controls.Add(this.buttonAddRoute);
 			this.splitContainer1.Panel2.Controls.Add(this.groupBoxRouteEdit);
@@ -100,6 +106,19 @@
 			this.gmap.Size = new System.Drawing.Size(428, 383);
 			this.gmap.TabIndex = 0;
 			this.gmap.Zoom = 10D;
+			// 
+			// groupBoxRoutes
+			// 
+			this.groupBoxRoutes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBoxRoutes.Controls.Add(this.listBox1);
+			this.groupBoxRoutes.Location = new System.Drawing.Point(3, 227);
+			this.groupBoxRoutes.Name = "groupBoxRoutes";
+			this.groupBoxRoutes.Size = new System.Drawing.Size(223, 153);
+			this.groupBoxRoutes.TabIndex = 7;
+			this.groupBoxRoutes.TabStop = false;
+			this.groupBoxRoutes.Text = "Маршруты";
 			// 
 			// textBoxNumber
 			// 
@@ -224,6 +243,8 @@
 			// 
 			this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.очиститьToolStripMenuItem,
+            this.открітьToolStripMenuItem,
+            this.сохранитьToolStripMenuItem,
             this.toolStripMenuItem1,
             this.выходToolStripMenuItem});
 			this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
@@ -233,8 +254,9 @@
 			// очиститьToolStripMenuItem
 			// 
 			this.очиститьToolStripMenuItem.Name = "очиститьToolStripMenuItem";
-			this.очиститьToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.очиститьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.очиститьToolStripMenuItem.Text = "Очистить";
+			this.очиститьToolStripMenuItem.Click += new System.EventHandler(this.очиститьToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -246,12 +268,6 @@
 			this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
 			this.выходToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.выходToolStripMenuItem.Text = "Выход";
-			// 
-			// настройкиToolStripMenuItem
-			// 
-			this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-			this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
-			this.настройкиToolStripMenuItem.Text = "Настройки";
 			// 
 			// правкаToolStripMenuItem
 			// 
@@ -267,6 +283,36 @@
 			this.отменаToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.отменаToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
 			this.отменаToolStripMenuItem.Text = "Отмена";
+			this.отменаToolStripMenuItem.Click += new System.EventHandler(this.отменаToolStripMenuItem_Click);
+			// 
+			// настройкиToolStripMenuItem
+			// 
+			this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+			this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+			this.настройкиToolStripMenuItem.Text = "Настройки";
+			// 
+			// listBox1
+			// 
+			this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listBox1.FormattingEnabled = true;
+			this.listBox1.Location = new System.Drawing.Point(3, 16);
+			this.listBox1.Name = "listBox1";
+			this.listBox1.Size = new System.Drawing.Size(217, 134);
+			this.listBox1.TabIndex = 1;
+			// 
+			// сохранитьToolStripMenuItem
+			// 
+			this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+			this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.сохранитьToolStripMenuItem.Text = "Сохранить";
+			this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
+			// 
+			// открітьToolStripMenuItem
+			// 
+			this.открітьToolStripMenuItem.Name = "открітьToolStripMenuItem";
+			this.открітьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.открітьToolStripMenuItem.Text = "Открыть";
+			this.открітьToolStripMenuItem.Click += new System.EventHandler(this.открітьToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -283,6 +329,7 @@
 			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.groupBoxRoutes.ResumeLayout(false);
 			this.groupBoxRouteEdit.ResumeLayout(false);
 			this.groupBoxRouteEdit.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
@@ -313,6 +360,10 @@
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem отменаToolStripMenuItem;
+		private System.Windows.Forms.GroupBox groupBoxRoutes;
+		private System.Windows.Forms.ListBox listBox1;
+		private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem открітьToolStripMenuItem;
 
 	}
 }
