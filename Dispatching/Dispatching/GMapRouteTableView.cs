@@ -56,14 +56,8 @@ namespace Dispatching
 		[DisplayName("Цвет")]
 		public Color Color
 		{
-			get
-			{
-				return Route.Stroke.Color;
-			}
-			set
-			{
-				Route.Stroke.Color = value;
-			}
+			get;
+			set;
 		}
 		public override string ToString()
 		{

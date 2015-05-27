@@ -102,7 +102,7 @@ namespace Dispatching
 			LastMarkerAdded.Push(isMarker);
 			if (isMarker)
 			{
-				GMarkerGoogle marker = new GMarkerGoogle(gmap.Position, GMarkerGoogleType.green_dot);
+				GMarkerGoogle marker = new GMarkerGoogle(gmap.Position, GMarkerGoogleType.green_small);
 				markersOverlay.Markers.Add(marker);
 			}
 			if (lastPoint == PointLatLng.Empty)
@@ -159,6 +159,7 @@ namespace Dispatching
 			if (isEdit)
 			{
 				var result = new GMapTableView(route);
+				result.Color = route.Stroke.Color;
 				var currentIndex = result.Route.Points.Count - 1;
 				var currentMark = LastMarkerAdded.Pop();
 				var currentPos = result.Route.Points[currentIndex];
@@ -184,6 +185,7 @@ namespace Dispatching
 				isEdit = false;
 				lastPoint = PointLatLng.Empty;
 				UpdateRoutesList();
+				route = null;
 			}
 		}
 
@@ -194,6 +196,7 @@ namespace Dispatching
 				LastMarkerAdded.Clear();
 				LastPointsAdded.Clear();
 				route = new GMapRoute(template + textBoxNumber.Text);
+				route.Stroke.Width = 2;
 				routeOverlay.Routes.Add(route);
 				buttonAddRoute.Enabled = false;
 				groupBoxRouteEdit.Enabled = true;
@@ -225,15 +228,19 @@ namespace Dispatching
 		{
 			routeOverlay.Routes.Clear();
 			markersOverlay.Markers.Clear();
-			foreach (var item in routes)
+			for (int i = 0; i < routes.Count; i++)
 			{
-				routeOverlay.Routes.Add(item.Route);
+				var item = routes[i];
+				routeOverlay.Routes.Add(new GMapRoute(item.Route.Points, item.Name));
+				//routeOverlay.Routes[i].Stroke.Color = item.Color;
+				routeOverlay.Routes[i].Stroke.Width = 2;
 				foreach (var mark in item.Markers)
 				{
-					markersOverlay.Markers.Add(new GMarkerGoogle(mark, GMarkerGoogleType.arrow));
+					markersOverlay.Markers.Add(new GMarkerGoogle(mark, GMarkerGoogleType.green_small));
 				}
 			}
 			UpdateRoutesList();
+			RefreshMap();
 		}
 
 		private void SaveFile()
@@ -259,7 +266,19 @@ namespace Dispatching
 
 		private void UpdateRoutesList()
 		{
+			(listBox1.DataSource as BindingSource).DataSource = routes;
 			(listBox1.DataSource as BindingSource).ResetBindings(false);
+		}
+
+		private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (listBox1.Items.Count > 0 && (listBox1.SelectedItem as GMapTableView) != null)
+			{
+				foreach (var item in routes)
+					item.Route.Stroke.Width = 2;
+				(listBox1.SelectedItem as GMapTableView).Route.Stroke.Width = 5;
+				RefreshMap();
+			}
 		}
 	}
 }
