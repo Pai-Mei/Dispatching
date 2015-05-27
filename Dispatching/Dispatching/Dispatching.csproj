@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinSerializer.cs" />
+    <Compile Include="fmRoutes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmRoutes.Designer.cs">
+      <DependentUpon>fmRoutes.cs</DependentUpon>
+    </Compile>
     <Compile Include="fmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,16 +69,29 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetTextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetTextDialog.Designer.cs">
+      <DependentUpon>GetTextDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalObject.cs" />
     <Compile Include="GMapRouteTableView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Xml.cs" />
+    <EmbeddedResource Include="fmRoutes.resx">
+      <DependentUpon>fmRoutes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="fmSettings.resx">
       <DependentUpon>fmSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetTextDialog.resx">
+      <DependentUpon>GetTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -24,6 +24,7 @@ namespace Dispatching
 		public List<PointLatLng> Markers { get; set; }
 		[Browsable(false)]
 		public List<Double> MarkersDistance { get; set; }
+
 		[DisplayName("Название")]
 		public String Name {
 			get
@@ -35,13 +36,24 @@ namespace Dispatching
 				Route.Name = value;
 			}
 		}
-		[DisplayName("Расстояние")]
+
+		[DisplayName("Расстояние(км)")]
 		public Double Distanse {
 			get
 			{
-				return Route.Distance;
+				return Math.Round(Route.Distance, 2);
 			}
 		}
+
+		[DisplayName("Кол-во остановок")]
+		public Double StopsNumber
+		{
+			get
+			{
+				return Markers.Count;
+			}
+		}
+
 		[DisplayName("Показать")]
 		public Boolean IsVisible {
 			get
@@ -53,7 +65,8 @@ namespace Dispatching
 				Route.IsVisible = value;
 			}
 		}
-		[DisplayName("Цвет")]
+
+		[Browsable(false)]
 		public Color Color
 		{
 			get;

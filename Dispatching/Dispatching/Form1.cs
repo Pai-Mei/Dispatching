@@ -19,6 +19,8 @@ namespace Dispatching
 		private Boolean isEdit = false;
 		private List<GMapTableView> routes;
 		private GMapRoute route;
+		private List<GMapMarker> routeMarkers;
+		private List<GMapMarker> Stops;
 		private GMapOverlay markersOverlay;
 		private GMapOverlay routeOverlay;
 		private PointLatLng lastPoint = PointLatLng.Empty;
@@ -28,6 +30,8 @@ namespace Dispatching
 		public Form1()
 		{
 			routes = new List<GMapTableView>();
+			routeMarkers = new List<GMapMarker>();
+			Stops = new List<GMapMarker>();
 			InitializeComponent();
 			listBox1.DataSource = new BindingSource();
 			(listBox1.DataSource as BindingSource).DataSource = routes;
@@ -42,12 +46,14 @@ namespace Dispatching
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			AddPointToRoute(gmap.Position, true);
+			GetTextDialog gtd = new GetTextDialog();
+			if(gtd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+				AddMarker(gmap.Position, gtd.TextResult);
 		}
-
+		
 		private void buttonAddRoadPoint_Click(object sender, EventArgs e)
 		{
-			AddPointToRoute(gmap.Position, false);			
+			AddPointToRoute(gmap.Position, null);			
 		}
 		
 		private void buttonAddRoute_Click(object sender, EventArgs e)
@@ -95,40 +101,72 @@ namespace Dispatching
 			New();
 		}
 
+		private void gmap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+		{
+			AddPointToRoute(item.Position, item);
+		}
+
+		private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (listBox1.Items.Count > 0 && (listBox1.SelectedItem as GMapTableView) != null)
+			{
+				foreach (var item in routes)
+					item.Route.Stroke.Width = 2;
+				if ((listBox1.SelectedItem as GMapTableView).IsVisible)
+					(listBox1.SelectedItem as GMapTableView).Route.Stroke.Width = 5;
+				RefreshMap();
+			}
+		}
+
+		private void маршрутыToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			fmRoutes routesView = new fmRoutes(routes);
+			routesView.ShowDialog();
+			UpdateData();
+		}
+
+
 //----------------------------------------------------------------------------------
 
-		private void AddPointToRoute(PointLatLng point, Boolean isMarker)
+		private void AddMarker(PointLatLng pointLatLng, string text)
 		{
-			LastMarkerAdded.Push(isMarker);
-			if (isMarker)
+			GMarkerGoogle marker = new GMarkerGoogle(pointLatLng, GMarkerGoogleType.green_small);
+			marker.ToolTipText = text;
+			markersOverlay.Markers.Add(marker);
+			Stops.Add(marker);
+		}
+
+		private void AddPointToRoute(PointLatLng point, GMapMarker Marker)
+		{
+			if (isEdit)
 			{
-				GMarkerGoogle marker = new GMarkerGoogle(gmap.Position, GMarkerGoogleType.green_small);
-				markersOverlay.Markers.Add(marker);
-			}
-			if (lastPoint == PointLatLng.Empty)
-			{
-				route.Points.Add(gmap.Position);
-				LastPointsAdded.Push(1);
-				Distanse.Push(route.Distance);
-			}
-			else
-			{
-				MapRoute routePart = GMap.NET.MapProviders.BingMapProvider.Instance.GetRoute(
-						lastPoint, gmap.Position, false, false, 15);
-				if (routePart != null)
+				LastMarkerAdded.Push(Marker != null);
+				routeMarkers.Add(Marker);
+				if (lastPoint == PointLatLng.Empty)
 				{
-					route.Points.AddRange(routePart.Points);
-					LastPointsAdded.Push(routePart.Points.Count);
+					route.Points.Add(point);
+					LastPointsAdded.Push(1);
+					Distanse.Push(route.Distance);
 				}
 				else
 				{
-					route.Points.Add(gmap.Position);
-					LastPointsAdded.Push(1);
+					MapRoute routePart = GMap.NET.MapProviders.BingMapProvider.Instance.GetRoute(
+							lastPoint, point, false, false, 15);
+					if (routePart != null)
+					{
+						route.Points.AddRange(routePart.Points);
+						LastPointsAdded.Push(routePart.Points.Count);
+					}
+					else
+					{
+						route.Points.Add(point);
+						LastPointsAdded.Push(1);
+					}
+					Distanse.Push(route.Distance);
 				}
-				Distanse.Push(route.Distance);
+				lastPoint = point;
+				RefreshMap();
 			}
-			lastPoint = gmap.Position;
-			RefreshMap();
 		}
 
 		private void RefreshMap()
@@ -141,17 +179,25 @@ namespace Dispatching
 
 		private void Undo()
 		{
-			if (LastPointsAdded.Count > 0)
+			if (isEdit)
 			{
-				var n = LastPointsAdded.Pop();
-				route.Points.RemoveRange(route.Points.Count - n, n);
+				if (LastPointsAdded.Count > 0)
+				{
+					var n = LastPointsAdded.Pop();
+					route.Points.RemoveRange(route.Points.Count - n, n);
+				}
+				if (Distanse.Count > 0)
+					Distanse.Pop();
+				RefreshMap();
 			}
-			if (LastMarkerAdded.Count > 0)
-				if (LastMarkerAdded.Pop())
+			else
+			{
+				if (Stops.Count > 0)
+				{
+					Stops.RemoveAt(Stops.Count - 1);
 					markersOverlay.Markers.RemoveAt(markersOverlay.Markers.Count - 1);
-			if (Distanse.Count > 0)
-				Distanse.Pop();
-			RefreshMap();
+				}
+			}
 		}
 
 		private void FinishEditRoute()
@@ -159,6 +205,7 @@ namespace Dispatching
 			if (isEdit)
 			{
 				var result = new GMapTableView(route);
+				result.Route.Stroke.Width = 2;
 				result.Color = route.Stroke.Color;
 				var currentIndex = result.Route.Points.Count - 1;
 				var currentMark = LastMarkerAdded.Pop();
@@ -193,10 +240,16 @@ namespace Dispatching
 		{
 			if (!isEdit)
 			{
+				if((from r in routes where r.Name == template + textBoxNumber.Text select r).Any())
+				{
+					MessageBox.Show("Такой маршрут уже существует!", "Ошибка.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
 				LastMarkerAdded.Clear();
 				LastPointsAdded.Clear();
 				route = new GMapRoute(template + textBoxNumber.Text);
-				route.Stroke.Width = 2;
+				route.Stroke.Width = 5;
+				route.Stroke.Color = Color.Red;
 				routeOverlay.Routes.Add(route);
 				buttonAddRoute.Enabled = false;
 				groupBoxRouteEdit.Enabled = true;
@@ -211,35 +264,50 @@ namespace Dispatching
 			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				New();
+				GlobalObject GO = new GlobalObject();
 				try
 				{
-					routes = new BinSerializer.BinSerializer().DeserializeObject<List<GMapTableView>>(ofd.FileName);
+					GO = new BinSerializer.BinSerializer().DeserializeObject<GlobalObject>(ofd.FileName);
+					routes = GO.routes;
+					Stops = GO.stops;
 				}
 				catch
 				{
 					MessageBox.Show("Не удалось открыть файл!","Ошибка",MessageBoxButtons.OK,MessageBoxIcon.Warning);
 					return;
 				}
-				UpdateRoutes();
+				UpdateData();
 			}
 		}
 
 		private void UpdateRoutes()
 		{
 			routeOverlay.Routes.Clear();
-			markersOverlay.Markers.Clear();
 			for (int i = 0; i < routes.Count; i++)
 			{
 				var item = routes[i];
+				if (!item.IsVisible)
+					continue;
 				routeOverlay.Routes.Add(new GMapRoute(item.Route.Points, item.Name));
 				//routeOverlay.Routes[i].Stroke.Color = item.Color;
-				routeOverlay.Routes[i].Stroke.Width = 2;
-				foreach (var mark in item.Markers)
-				{
-					markersOverlay.Markers.Add(new GMarkerGoogle(mark, GMarkerGoogleType.green_small));
-				}
+				routeOverlay.Routes.Last().Stroke.Width = 2;
 			}
 			UpdateRoutesList();
+		}
+
+		private void UpdateStops()
+		{
+			markersOverlay.Markers.Clear();
+			foreach (var m in Stops)
+			{
+				markersOverlay.Markers.Add(m);
+			}
+		}
+
+		private void UpdateData()
+		{
+			UpdateRoutes();
+			UpdateStops();
 			RefreshMap();
 		}
 
@@ -249,7 +317,15 @@ namespace Dispatching
 			sfd.Filter = "Routes Files(*rts) | *.rts";
 			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				new BinSerializer.BinSerializer().SerializeObject<List<GMapTableView>>(sfd.FileName, routes);
+				try
+				{
+					GlobalObject GO = new GlobalObject();
+					GO.stops = Stops;
+					GO.routes = routes;
+					new BinSerializer.BinSerializer().SerializeObject<GlobalObject>(sfd.FileName, GO);
+				}
+				catch 
+				{ }
 			}
 		}
 
@@ -269,16 +345,6 @@ namespace Dispatching
 			(listBox1.DataSource as BindingSource).DataSource = routes;
 			(listBox1.DataSource as BindingSource).ResetBindings(false);
 		}
-
-		private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (listBox1.Items.Count > 0 && (listBox1.SelectedItem as GMapTableView) != null)
-			{
-				foreach (var item in routes)
-					item.Route.Stroke.Width = 2;
-				(listBox1.SelectedItem as GMapTableView).Route.Stroke.Width = 5;
-				RefreshMap();
-			}
-		}
+	
 	}
 }
