@@ -17,11 +17,14 @@ namespace Dispatching
 			this.Route = RouteBase;
 			Markers = new List<PointLatLng>();
 			MarkersDistance = new List<double>();
+			StopsNames = new List<string>();
 		}
 		[Browsable(false)]
 		public GMapRoute Route { get; set; }
 		[Browsable(false)]
 		public List<PointLatLng> Markers { get; set; }
+		[Browsable(false)]
+		public List<String> StopsNames { get; set; }
 		[Browsable(false)]
 		public List<Double> MarkersDistance { get; set; }
 
@@ -34,6 +37,19 @@ namespace Dispatching
 			set
 			{
 				Route.Name = value;
+			}
+		}
+
+		[DisplayName("Показать")]
+		public Boolean IsVisible
+		{
+			get
+			{
+				return Route.IsVisible;
+			}
+			set
+			{
+				Route.IsVisible = value;
 			}
 		}
 
@@ -54,17 +70,17 @@ namespace Dispatching
 			}
 		}
 
-		[DisplayName("Показать")]
-		public Boolean IsVisible {
-			get
-			{
-				return Route.IsVisible;
-			}
-			set
-			{
-				Route.IsVisible = value;
-			}
-		}
+		[DisplayName("Ср. скорость(км/ч)")]
+		public Double Speed { get; set; }
+
+		[DisplayName("Объем перевозок(чел/день)")]
+		public Double DayPeople { get; set; }
+
+		[DisplayName("Кол-во мест")]
+		public Double InBusPeople { get; set; }
+
+		[DisplayName("Кол-во авто")]
+		public Int32 AutoNumber { get; set; }
 
 		[Browsable(false)]
 		public Color Color

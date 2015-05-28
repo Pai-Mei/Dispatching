@@ -27,6 +27,7 @@ namespace Dispatching
 		private Stack<Int32> LastPointsAdded = new Stack<Int32>();
 		private Stack<Boolean> LastMarkerAdded = new Stack<Boolean>();
 		private Stack<Double> Distanse = new Stack<Double>();
+		private Stack<Boolean> LastStopsAdded = new Stack<bool>();
 		public Form1()
 		{
 			routes = new List<GMapTableView>();
@@ -125,6 +126,21 @@ namespace Dispatching
 			UpdateData();
 		}
 
+		private void составитьРасписаниеToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			fmCreateShedule cs = new fmCreateShedule(new GlobalObject() { routes = routes, stops = Stops });
+			cs.ShowDialog();
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{
+			if (listBox1.Items.Count > 0 && (listBox1.SelectedItem as GMapTableView) != null)
+			{
+				routes.Remove((listBox1.SelectedItem as GMapTableView));
+				RefreshMap();
+				UpdateData();
+			}
+		}
 
 //----------------------------------------------------------------------------------
 
@@ -134,6 +150,7 @@ namespace Dispatching
 			marker.ToolTipText = text;
 			markersOverlay.Markers.Add(marker);
 			Stops.Add(marker);
+			LastStopsAdded.Push(true);
 		}
 
 		private void AddPointToRoute(PointLatLng point, GMapMarker Marker)
@@ -141,7 +158,8 @@ namespace Dispatching
 			if (isEdit)
 			{
 				LastMarkerAdded.Push(Marker != null);
-				routeMarkers.Add(Marker);
+				if(Marker != null)
+					routeMarkers.Add(Marker);
 				if (lastPoint == PointLatLng.Empty)
 				{
 					route.Points.Add(point);
@@ -165,6 +183,7 @@ namespace Dispatching
 					Distanse.Push(route.Distance);
 				}
 				lastPoint = point;
+				LastStopsAdded.Push(false);
 				RefreshMap();
 			}
 		}
@@ -185,19 +204,27 @@ namespace Dispatching
 				{
 					var n = LastPointsAdded.Pop();
 					route.Points.RemoveRange(route.Points.Count - n, n);
+					lastPoint = route.Points.Any() ? route.Points.Last() : PointLatLng.Empty;
 				}
 				if (Distanse.Count > 0)
 					Distanse.Pop();
-				RefreshMap();
+				if (LastMarkerAdded.Count > 0)
+					LastMarkerAdded.Pop();
+				
 			}
 			else
 			{
-				if (Stops.Count > 0)
+				if (LastStopsAdded.Count > 0)
 				{
-					Stops.RemoveAt(Stops.Count - 1);
-					markersOverlay.Markers.RemoveAt(markersOverlay.Markers.Count - 1);
+					var isStop = LastStopsAdded.Pop();
+					if (isStop && Stops.Count > 0)
+					{
+						Stops.RemoveAt(Stops.Count - 1);
+						markersOverlay.Markers.RemoveAt(markersOverlay.Markers.Count - 1);
+					}
 				}
 			}
+			RefreshMap();
 		}
 
 		private void FinishEditRoute()
@@ -211,9 +238,15 @@ namespace Dispatching
 				var currentMark = LastMarkerAdded.Pop();
 				var currentPos = result.Route.Points[currentIndex];
 				var dist = Distanse.Pop();
+				LastPointsAdded.Pop();
 				if (currentMark)
+				{
+					result.MarkersDistance.Add(dist);
 					result.Markers.Add(currentPos);
-				while (LastMarkerAdded.Count > 0)
+					result.StopsNames.Add(routeMarkers.Last().ToolTipText);
+				}
+				var i = routeMarkers.Count - 2;
+				while (Distanse.Count > 0)
 				{
 					currentMark = LastMarkerAdded.Pop();
 					var index = LastPointsAdded.Pop();
@@ -223,9 +256,11 @@ namespace Dispatching
 					if (currentMark)
 					{
 						result.Markers.Add(currentPos);
+						result.MarkersDistance.Add(dist);
+						result.StopsNames.Add(routeMarkers[i].ToolTipText);
 					}
+					i--;
 				}
-				
 				routes.Add(result);
 				buttonAddRoute.Enabled = true;
 				groupBoxRouteEdit.Enabled = false;
@@ -345,6 +380,8 @@ namespace Dispatching
 			(listBox1.DataSource as BindingSource).DataSource = routes;
 			(listBox1.DataSource as BindingSource).ResetBindings(false);
 		}
+
+		
 	
 	}
 }

@@ -34,11 +34,11 @@
 			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.textBoxNumber = new System.Windows.Forms.TextBox();
 			this.buttonAddRoute = new System.Windows.Forms.Button();
+			this.buttonAddStation = new System.Windows.Forms.Button();
 			this.groupBoxRouteEdit = new System.Windows.Forms.GroupBox();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonFinish = new System.Windows.Forms.Button();
 			this.buttonSetColor = new System.Windows.Forms.Button();
-			this.buttonAddStation = new System.Windows.Forms.Button();
 			this.buttonAddRoadPoint = new System.Windows.Forms.Button();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,11 +49,12 @@
 			this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.отменаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.расписаниеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.маршрутыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.составитьРасписаниеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.button1 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -76,13 +77,14 @@
 			// 
 			// splitContainer1.Panel2
 			// 
+			this.splitContainer1.Panel2.Controls.Add(this.button1);
 			this.splitContainer1.Panel2.Controls.Add(this.groupBoxRoutes);
 			this.splitContainer1.Panel2.Controls.Add(this.textBoxNumber);
 			this.splitContainer1.Panel2.Controls.Add(this.buttonAddRoute);
 			this.splitContainer1.Panel2.Controls.Add(this.buttonAddStation);
 			this.splitContainer1.Panel2.Controls.Add(this.groupBoxRouteEdit);
-			this.splitContainer1.Size = new System.Drawing.Size(954, 362);
-			this.splitContainer1.SplitterDistance = 710;
+			this.splitContainer1.Size = new System.Drawing.Size(951, 362);
+			this.splitContainer1.SplitterDistance = 707;
 			this.splitContainer1.TabIndex = 0;
 			// 
 			// gmap
@@ -107,7 +109,7 @@
 			this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
 			this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
 			this.gmap.ShowTileGridLines = false;
-			this.gmap.Size = new System.Drawing.Size(706, 358);
+			this.gmap.Size = new System.Drawing.Size(703, 358);
 			this.gmap.TabIndex = 0;
 			this.gmap.Zoom = 10D;
 			this.gmap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
@@ -120,7 +122,7 @@
 			this.groupBoxRoutes.Controls.Add(this.listBox1);
 			this.groupBoxRoutes.Location = new System.Drawing.Point(3, 213);
 			this.groupBoxRoutes.Name = "groupBoxRoutes";
-			this.groupBoxRoutes.Size = new System.Drawing.Size(230, 142);
+			this.groupBoxRoutes.Size = new System.Drawing.Size(230, 113);
 			this.groupBoxRoutes.TabIndex = 7;
 			this.groupBoxRoutes.TabStop = false;
 			this.groupBoxRoutes.Text = "Маршруты";
@@ -131,7 +133,7 @@
 			this.listBox1.FormattingEnabled = true;
 			this.listBox1.Location = new System.Drawing.Point(3, 16);
 			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(224, 123);
+			this.listBox1.Size = new System.Drawing.Size(224, 94);
 			this.listBox1.TabIndex = 1;
 			this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
 			// 
@@ -153,6 +155,18 @@
 			this.buttonAddRoute.Text = "Добавить новый маршрут";
 			this.buttonAddRoute.UseVisualStyleBackColor = true;
 			this.buttonAddRoute.Click += new System.EventHandler(this.buttonAddRoute_Click);
+			// 
+			// buttonAddStation
+			// 
+			this.buttonAddStation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAddStation.Location = new System.Drawing.Point(3, 32);
+			this.buttonAddStation.Name = "buttonAddStation";
+			this.buttonAddStation.Size = new System.Drawing.Size(230, 23);
+			this.buttonAddStation.TabIndex = 0;
+			this.buttonAddStation.Text = "Добавить остановку";
+			this.buttonAddStation.UseVisualStyleBackColor = true;
+			this.buttonAddStation.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// groupBoxRouteEdit
 			// 
@@ -206,18 +220,6 @@
 			this.buttonSetColor.UseVisualStyleBackColor = true;
 			this.buttonSetColor.Click += new System.EventHandler(this.buttonSetColor_Click);
 			// 
-			// buttonAddStation
-			// 
-			this.buttonAddStation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAddStation.Location = new System.Drawing.Point(3, 32);
-			this.buttonAddStation.Name = "buttonAddStation";
-			this.buttonAddStation.Size = new System.Drawing.Size(230, 23);
-			this.buttonAddStation.TabIndex = 0;
-			this.buttonAddStation.Text = "Добавить остановку";
-			this.buttonAddStation.UseVisualStyleBackColor = true;
-			this.buttonAddStation.Click += new System.EventHandler(this.button1_Click);
-			// 
 			// buttonAddRoadPoint
 			// 
 			this.buttonAddRoadPoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -239,7 +241,7 @@
             this.настройкиToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(954, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(951, 24);
 			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -303,12 +305,6 @@
 			this.отменаToolStripMenuItem.Text = "Отмена";
 			this.отменаToolStripMenuItem.Click += new System.EventHandler(this.отменаToolStripMenuItem_Click);
 			// 
-			// настройкиToolStripMenuItem
-			// 
-			this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-			this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
-			this.настройкиToolStripMenuItem.Text = "Настройки";
-			// 
 			// расписаниеToolStripMenuItem
 			// 
 			this.расписаниеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -322,7 +318,7 @@
 			// маршрутыToolStripMenuItem
 			// 
 			this.маршрутыToolStripMenuItem.Name = "маршрутыToolStripMenuItem";
-			this.маршрутыToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.маршрутыToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
 			this.маршрутыToolStripMenuItem.Text = "Маршруты";
 			this.маршрутыToolStripMenuItem.Click += new System.EventHandler(this.маршрутыToolStripMenuItem_Click);
 			// 
@@ -336,12 +332,31 @@
 			this.составитьРасписаниеToolStripMenuItem.Name = "составитьРасписаниеToolStripMenuItem";
 			this.составитьРасписаниеToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
 			this.составитьРасписаниеToolStripMenuItem.Text = "Составить расписание";
+			this.составитьРасписаниеToolStripMenuItem.Click += new System.EventHandler(this.составитьРасписаниеToolStripMenuItem_Click);
+			// 
+			// настройкиToolStripMenuItem
+			// 
+			this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+			this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+			this.настройкиToolStripMenuItem.Text = "Настройки";
+			// 
+			// button1
+			// 
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Location = new System.Drawing.Point(3, 329);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(230, 23);
+			this.button1.TabIndex = 6;
+			this.button1.Text = "Удалить маршрут";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click_1);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(954, 386);
+			this.ClientSize = new System.Drawing.Size(951, 386);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
@@ -389,6 +404,7 @@
 		private System.Windows.Forms.ToolStripMenuItem маршрутыToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem составитьРасписаниеToolStripMenuItem;
+		private System.Windows.Forms.Button button1;
 
 	}
 }

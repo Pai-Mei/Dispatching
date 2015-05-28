@@ -22,5 +22,20 @@ namespace Dispatching
 		{
 			TextResult = textBox1.Text;
 		}
+
+		private void GetTextDialog_Load(object sender, EventArgs e)
+		{
+			this.ActiveControl = textBox1;
+		}
+
+		private void textBox1_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				TextResult = textBox1.Text;
+				DialogResult = System.Windows.Forms.DialogResult.OK;
+				this.Close();
+			}
+		}
 	}
 }

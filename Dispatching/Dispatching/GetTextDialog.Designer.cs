@@ -48,7 +48,8 @@
 			this.textBox1.Location = new System.Drawing.Point(12, 12);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(188, 20);
-			this.textBox1.TabIndex = 3;
+			this.textBox1.TabIndex = 0;
+			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
 			// 
 			// GetTextDialog
 			// 
@@ -62,6 +63,7 @@
 			this.MinimizeBox = false;
 			this.Name = "GetTextDialog";
 			this.Text = "Текст";
+			this.Load += new System.EventHandler(this.GetTextDialog_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
