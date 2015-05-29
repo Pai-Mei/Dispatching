@@ -74,10 +74,10 @@ namespace Dispatching
 		public Double Speed { get; set; }
 
 		[DisplayName("Объем перевозок(чел/день)")]
-		public Double DayPeople { get; set; }
+		public Int32 DayPeople { get; set; }
 
 		[DisplayName("Кол-во мест")]
-		public Double InBusPeople { get; set; }
+		public Int32 InBusPeople { get; set; }
 
 		[DisplayName("Кол-во авто")]
 		public Int32 AutoNumber { get; set; }

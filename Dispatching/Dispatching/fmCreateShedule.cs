@@ -70,10 +70,13 @@ namespace Dispatching
 				TimeSpan stepTime = new TimeSpan(0, 0, (int)(fullRouteTime.TotalSeconds * 2 / R.AutoNumber));
 				TimeList TL = new Dispatching.TimeList();
 				TL.Name = R.Name;
+				var people = 0;
 				for (TimeSpan t = StartTime; t < EndTime; t = t.Add(stepTime))
 				{
 					TL.Time += String.Format("{0:hh\\:mm} ", t);
+					people += R.InBusPeople;
 				}
+				TL.Effect = (R.DayPeople * 100 / people).ToString() + "%";
 				TL.Shedule = new List<StopsShedule>();
 				for (int i = R.Markers.Count - 1; i > 0; i--)
 				{
@@ -95,8 +98,12 @@ namespace Dispatching
 	{
 		[DisplayName("Название")]
 		public String Name { get; set; }
+		[DisplayName("Ефективность")]
+		public String Effect { get; set; }
 		[DisplayName("График")]
 		public String Time { get; set; }
+		
+
 		[Browsable(false)]
 		public List<StopsShedule> Shedule { get; set; }
 	}
