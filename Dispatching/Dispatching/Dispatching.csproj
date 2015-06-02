@@ -57,6 +57,12 @@
     <Compile Include="fmCreateShedule.Designer.cs">
       <DependentUpon>fmCreateShedule.cs</DependentUpon>
     </Compile>
+    <Compile Include="fmDBDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmDBDialog.Designer.cs">
+      <DependentUpon>fmDBDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="fmRoutes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     <Compile Include="Xml.cs" />
     <EmbeddedResource Include="fmCreateShedule.resx">
       <DependentUpon>fmCreateShedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fmDBDialog.resx">
+      <DependentUpon>fmDBDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="fmRoutes.resx">
       <DependentUpon>fmRoutes.cs</DependentUpon>

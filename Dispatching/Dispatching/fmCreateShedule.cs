@@ -65,9 +65,12 @@ namespace Dispatching
 
 			foreach (var R in Routes)
 			{
+                StartTime = StartTime.Add(new TimeSpan(0, 30, 0));
+                int count = (int)Math.Ceiling((double)R.DayPeople / (2 * R.InBusPeople));
 				int fullTimeMinutes = (int)(R.Distanse / R.Speed * 60 + StopsDelay * R.Markers.Count);
-				TimeSpan fullRouteTime = new TimeSpan(0, fullTimeMinutes, 0);
-				TimeSpan stepTime = new TimeSpan(0, 0, (int)(fullRouteTime.TotalSeconds * 2 / R.AutoNumber));
+				//TimeSpan fullRouteTime = new TimeSpan(0, fullTimeMinutes, 0);
+				//TimeSpan stepTime = new TimeSpan(0, 0, (int)(fullRouteTime.TotalSeconds * 2 / R.AutoNumber));
+                TimeSpan stepTime = new TimeSpan(0, 0,(int)(Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds / count)));
 				TimeList TL = new Dispatching.TimeList();
 				TL.Name = R.Name;
 				var people = 0;
@@ -76,7 +79,7 @@ namespace Dispatching
 					TL.Time += String.Format("{0:hh\\:mm} ", t);
 					people += R.InBusPeople;
 				}
-				TL.Effect = (R.DayPeople * 100 / people).ToString() + "%";
+				TL.Effect = (R.DayPeople * 100 / 2 / people).ToString() + "%";
 				TL.Shedule = new List<StopsShedule>();
 				for (int i = R.Markers.Count - 1; i > 0; i--)
 				{

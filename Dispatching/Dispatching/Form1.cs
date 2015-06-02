@@ -10,11 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BinSerializer;
+using System.IO;
 
 namespace Dispatching
 {
 	public partial class Form1 : Form
 	{
+        private bool useDB = false;
+        private string LocalDBFileName = "\\localDB.db";
 		private readonly string template = "Маршрут №";
 		private Boolean isEdit = false;
 		private List<GMapTableView> routes;
@@ -298,11 +301,17 @@ namespace Dispatching
 			ofd.Filter = "Routes Files(*rts) | *.rts";
 			if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				New();
+                LoadFile(ofd.FileName);
+			}
+		}
+
+        private void LoadFile(string FileName)
+        {
+            New();
 				GlobalObject GO = new GlobalObject();
 				try
 				{
-					GO = new BinSerializer.BinSerializer().DeserializeObject<GlobalObject>(ofd.FileName);
+					GO = new BinSerializer.BinSerializer().DeserializeObject<GlobalObject>(FileName);
 					routes = GO.routes;
 					Stops = GO.stops;
 				}
@@ -312,8 +321,7 @@ namespace Dispatching
 					return;
 				}
 				UpdateData();
-			}
-		}
+        }
 
 		private void UpdateRoutes()
 		{
@@ -352,17 +360,22 @@ namespace Dispatching
 			sfd.Filter = "Routes Files(*rts) | *.rts";
 			if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				try
-				{
-					GlobalObject GO = new GlobalObject();
-					GO.stops = Stops;
-					GO.routes = routes;
-					new BinSerializer.BinSerializer().SerializeObject<GlobalObject>(sfd.FileName, GO);
-				}
-				catch 
-				{ }
+                SaveFile(sfd.FileName);
 			}
 		}
+
+        private void SaveFile(string FileName)
+        {
+            try
+            {
+                GlobalObject GO = new GlobalObject();
+                GO.stops = Stops;
+                GO.routes = routes;
+                new BinSerializer.BinSerializer().SerializeObject<GlobalObject>(FileName, GO);
+            }
+            catch
+            { }
+        }
 
 		private void New()
 		{
@@ -380,6 +393,29 @@ namespace Dispatching
 			(listBox1.DataSource as BindingSource).DataSource = routes;
 			(listBox1.DataSource as BindingSource).ResetBindings(false);
 		}
+
+        private void подключениеКБДToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(new fmDBDialog().ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (File.Exists(Environment.CurrentDirectory + LocalDBFileName))
+                    LoadFile(Environment.CurrentDirectory + LocalDBFileName);
+                else
+                    MessageBox.Show("База данных пуста! Записи автоматически добавятся в процессе работы");
+                useDB = true;
+            }
+        }
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(useDB)
+                SaveFile(Environment.CurrentDirectory + LocalDBFileName);
+        }
 
 		
 	
