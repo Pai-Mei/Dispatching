@@ -26,8 +26,15 @@ namespace Dispatching
                 MessageBox.Show("Заполните все поля!");
             }
             else{
-            DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Close();
+                if (textBox1.Text == "avtobaza" && textBox2.Text == "admin111")
+                {
+                    DialogResult = System.Windows.Forms.DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Не правильный логин/пароль.");
+                }
             }
         }
 

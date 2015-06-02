@@ -70,6 +70,13 @@ namespace Dispatching
 			}
 		}
 
+        [DisplayName("Стоимость проезда грн.")]
+        public Double Cost
+        {
+            get;
+            set;
+        }
+
 		[DisplayName("Ср. скорость(км/ч)")]
 		public Double Speed { get; set; }
 

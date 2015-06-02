@@ -73,12 +73,14 @@ namespace Dispatching
                 TimeSpan stepTime = new TimeSpan(0, 0,(int)(Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds / count)));
 				TimeList TL = new Dispatching.TimeList();
 				TL.Name = R.Name;
+                
 				var people = 0;
 				for (TimeSpan t = StartTime; t < EndTime; t = t.Add(stepTime))
 				{
 					TL.Time += String.Format("{0:hh\\:mm} ", t);
 					people += R.InBusPeople;
 				}
+                TL.Money = 3 * people * R.Cost;
 				TL.Effect = (R.DayPeople * 100 / 2 / people).ToString() + "%";
 				TL.Shedule = new List<StopsShedule>();
 				for (int i = R.Markers.Count - 1; i > 0; i--)
@@ -103,6 +105,8 @@ namespace Dispatching
 		public String Name { get; set; }
 		[DisplayName("Ефективность")]
 		public String Effect { get; set; }
+        [DisplayName("Оборот грн.")]
+        public Double Money { get; set; }
 		[DisplayName("График")]
 		public String Time { get; set; }
 		
